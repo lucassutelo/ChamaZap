@@ -1,14 +1,10 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import React, {useState} from 'react';
-import {Alert, Image, Linking, Appearance} from 'react-native';
-import {
-  BoxActions,
-  BoxLogo,
-  Button,
-  ButtonTxt,
-  Container,
-  Input,
-} from './styles';
+import {Image, Appearance} from 'react-native';
+import {BoxActions, BoxLogo, Button, ButtonTxt, Container} from './styles';
+import InputNumber from './components/InputNumber';
+import ValidateNumber from './functions/ValidateNumber';
+import OpenChat from './functions/OpenChat';
 
 export default function Home() {
   const [number, setNumber] = useState('');
@@ -16,23 +12,11 @@ export default function Home() {
   const systemTheme = Appearance.getColorScheme();
 
   async function handleOpenChat() {
-    let numberSend = number;
+    const numberSend = ValidateNumber(number);
 
-    if (numberSend.length < 10 || numberSend.length > 11) {
-      Alert.alert('Atenção!', 'Digite um número válido.');
+    if (!numberSend) return;
 
-      return;
-    }
-
-    if (numberSend.length === 11)
-      numberSend = numberSend.substring(0, 2) + numberSend.substring(3);
-
-    try {
-      await Linking.openURL(`whatsapp://send?phone=+55${numberSend}`);
-    } catch (err) {
-      //O dispositivo pode não ter whatsapp instalado, então tentará pelo navegador
-      await Linking.openURL(`https://wa.me/+55${numberSend}`);
-    }
+    await OpenChat(numberSend);
 
     setNumber('');
   }
@@ -45,37 +29,10 @@ export default function Home() {
       </BoxLogo>
 
       <BoxActions>
-        <Input
-          style={
-            systemTheme === 'dark' ? {color: '#FFF', borderColor: '#CCC'} : null
-          }
-          autoFocus
-          value={number}
-          keyboardType="phone-pad"
-          placeholder="Digite o número"
-          placeholderTextColor="#BBB"
-          returnKeyType="send"
-          onSubmitEditing={() => handleOpenChat()}
-          onChangeText={(masked, unmasked) => {
-            setNumber(unmasked);
-          }}
-          mask={[
-            '(',
-            /\d/,
-            /\d/,
-            ')',
-            ' ',
-            /\d/,
-            /\d/,
-            /\d/,
-            /\d/,
-            /\d/,
-            '-',
-            /\d/,
-            /\d/,
-            /\d/,
-            /\d/,
-          ]}
+        <InputNumber
+          handleOpenChat={handleOpenChat}
+          number={number}
+          setNumber={setNumber}
         />
         <Button onPress={() => handleOpenChat()}>
           <ButtonTxt>Abrir conversa</ButtonTxt>
