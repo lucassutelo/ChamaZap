@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import React, { useState } from 'react';
-import { Image, Appearance } from 'react-native';
+import { Image } from 'react-native';
 import { BoxActions, BoxLogo, Button, ButtonTxt, Container } from './styles';
 import InputNumber from './components/InputNumber';
 import ValidateNumber from './functions/ValidateNumber';
@@ -8,8 +8,6 @@ import OpenChat from './functions/OpenChat';
 
 export default function Home() {
     const [number, setNumber] = useState('');
-
-    const systemTheme = Appearance.getColorScheme();
 
     async function handleOpenChat() {
         const numberSend = ValidateNumber(number);
@@ -22,9 +20,7 @@ export default function Home() {
     }
 
     return (
-        <Container
-            style={systemTheme === 'dark' ? { backgroundColor: '#000' } : null}
-        >
+        <Container>
             <BoxLogo>
                 <Image
                     source={require('../../assets/2.png')}

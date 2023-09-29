@@ -4,7 +4,7 @@ import MaskInput from 'react-native-mask-input';
 export const Container = styled.View`
     display: flex;
     flex: 1;
-    background-color: #fff;
+    background-color: ${props => props.theme.background};
     align-items: center;
     align-content: center;
     justify-content: flex-start;
@@ -27,13 +27,13 @@ export const BoxActions = styled.View`
 `;
 
 export const Input = styled(MaskInput)`
-    border: 2px solid #333;
+    border: 2px solid ${props => props.theme.description};
     height: 80px;
     width: 80%;
     border-radius: 10px;
     padding-left: 14px;
     padding-right: 14px;
-    color: #111;
+    color: ${props => props.theme.color};
     font-size: 34px;
 `;
 
