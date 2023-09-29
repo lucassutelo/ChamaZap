@@ -1,6 +1,6 @@
 const colors = {
     primary: '#03a23d',
-    primaryH: '##009235',
+    primaryH: '#009235',
     primaryL: '#0BD655',
     primaryR: '#FFF',
     error: '#ff2525',
@@ -8,4 +8,4 @@ const colors = {
     success: '#00a74b',
 };
 
-export {colors};
+export { colors };

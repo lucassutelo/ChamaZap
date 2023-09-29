@@ -1,6 +1,6 @@
 import React from 'react';
-import {Appearance} from 'react-native';
-import {Input} from '../styles';
+import { Appearance } from 'react-native';
+import { Input } from '../styles';
 
 interface IProps {
     number: string;
@@ -9,7 +9,7 @@ interface IProps {
 }
 
 export default function InputNumber(props: IProps) {
-    const {number, setNumber, handleOpenChat} = props;
+    const { number, setNumber, handleOpenChat } = props;
 
     const systemTheme = Appearance.getColorScheme();
 
@@ -17,7 +17,7 @@ export default function InputNumber(props: IProps) {
         <Input
             style={
                 systemTheme === 'dark'
-                    ? {color: '#FFF', borderColor: '#CCC'}
+                    ? { color: '#FFF', borderColor: '#CCC' }
                     : null
             }
             autoFocus
