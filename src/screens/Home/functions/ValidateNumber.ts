@@ -1,4 +1,4 @@
-import {Alert} from 'react-native';
+import { Alert } from 'react-native';
 
 export default function ValidateNumber(number: string): string | undefined {
     if (number.length < 10 || number.length > 11) {
