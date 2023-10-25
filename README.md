@@ -1,79 +1,25 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Chama no Zap - Chame Sem Salvar o Contato
 
-# Getting Started
+![GitHub License](https://img.shields.io/github/license/lucassutelo/ChamaZap)
+![GitHub Version](https://img.shields.io/badge/version-1.0-blue)
+[![Play Store](https://img.shields.io/badge/Download%20on-Google%20Play-<COLOR>)](https://play.google.com/store/apps/details?id=com.chamazap)
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+O Chama no Zap é um aplicativo móvel desenvolvido em React Native com TypeScript e JavaScript que permite aos usuários abrir uma conversa no WhatsApp diretamente, sem a necessidade de salvar o contato. Com este app, você pode simplesmente inserir o número de telefone e iniciar uma conversa no WhatsApp de forma rápida e conveniente.
 
-## Step 1: Start the Metro Server
+## Funcionalidades
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+- Abre uma conversa no WhatsApp com um número de telefone fornecido.
+- Sem a necessidade de salvar o contato na lista de contatos do seu telefone.
+- Interface simples e intuitiva.
 
-To start Metro, run the following command from the _root_ of your React Native project:
+## Tecnologias Utilizadas
 
-```bash
-# using npm
-npm start
+Este aplicativo foi desenvolvido utilizando as seguintes tecnologias:
 
-# OR using Yarn
-yarn start
-```
+- [React Native](https://reactnative.dev/): Uma estrutura de desenvolvimento de aplicativos móveis multiplataforma.
+- [TypeScript](https://www.typescriptlang.org/): Um superset tipado de JavaScript para melhorar a escalabilidade e a manutenibilidade do código.
+- JavaScript: A linguagem de programação principal para desenvolvimento de aplicativos móveis com React Native.
 
-## Step 2: Start your Application
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+[![Logotipo do WhatsApp Direct Link Opener](https://play.google.com/intl/pt-BR/badges/static/images/badges/pt-br_badge_web_generic.png)](https://play.google.com/store/apps/details?id=com.chamazap)
 
-### For Android
-
-```bash
-# using npm
-npm run android
-
-# OR using Yarn
-yarn android
-```
-
-### For iOS
-
-```bash
-# using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
-
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
-
-## Step 3: Modifying your App
-
-Now that you have successfully run the app, let's modify it.
-
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
-
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
