@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <resources>
-    <color name="primary">#03a23d</color>
-    <color name="background">#03a23d</color>
+    <!-- Mesmo fundo da tela principal (src/styles/themes/light.ts) para a transição da splash ser contínua. -->
+    <color name="background">#F5F7F6</color>
 </resources>
