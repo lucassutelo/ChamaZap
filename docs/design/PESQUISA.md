@@ -112,4 +112,51 @@ https://www.meta.com/brand/resources/whatsapp/whatsapp-brand/
 - ID interno do WhatsApp sem o 9 fora dos DDDs 11–28 — https://support.gupshup.io/hc/en-us/articles/4407840924953
 - WhatsApp Business aceita número fixo — https://canaltech.com.br/apps/como-usar-o-whatsapp-business-com-um-numero-de-telefone-fixo/
 
-<!-- LOJAS-FONTES -->
+## 4. Requisitos das lojas
+
+Páginas de ajuda do Play Console, reactnative.dev e meta.com estavam bloqueadas no ambiente da pesquisa; os
+fatos dessas fontes vêm dos trechos de busca **[snippet]** ou do código-fonte da documentação no GitHub.
+
+### Google Play / Android
+
+- Target API: desde 31/08/2026, apps novos e updates precisam de `targetSdk 36` (extensão até 01/11/2026); apps
+  publicados precisam de 35+ para continuar visíveis a usuários novos — https://developer.android.com/google/play/requirements/target-sdk ·
+  https://support.google.com/googleplay/android-developer/answer/11926878 **[snippet]**
+- 16 KB: obrigatório para apps com target 35+ (a página oficial atual cita bloqueio de updates a partir de
+  01/02/2027; cronograma anterior era 01/11/2025 com extensão até 31/05/2026); AGP 8.5.1+ e NDK r28+ —
+  https://developer.android.com/guide/practices/page-sizes
+- RN 0.77 foi a primeira versão com suporte a 16 KB — https://reactnative.dev/blog/2025/01/21/version-0.77
+- Edge-to-edge sem opt-out com target 36 — https://developer.android.com/about/versions/16/behavior-changes-16
+- SplashScreen API (Android 12+) — https://developer.android.com/develop/ui/views/launch/splash-screen
+- AGP mínimo por API (36 → 8.9.1+) — https://developer.android.com/build/releases/about-agp
+- Política de privacidade obrigatória para todos os apps, na loja e no app —
+  https://support.google.com/googleplay/android-developer/answer/10144311 **[snippet]**
+- Data safety obrigatório mesmo sem coleta — https://support.google.com/googleplay/android-developer/answer/10787469 **[snippet]**
+- Falsificação de identidade — https://support.google.com/googleplay/android-developer/answer/9888374 **[snippet]**
+- Propriedade intelectual — https://support.google.com/googleplay/android-developer/answer/9888072 **[snippet]**
+- Metadados (título ≤ 30) — https://support.google.com/googleplay/android-developer/answer/9898842 **[snippet]**
+- Funcionalidade mínima — https://support.google.com/googleplay/android-developer/answer/9898783 **[snippet]**
+- Verificação de desenvolvedor (Brasil: 30/09/2026) — https://developer.android.com/developer-verification
+
+### Apple / iOS
+
+- Xcode 26 + SDK iOS 26 obrigatórios desde 28/04/2026 — https://developer.apple.com/news/upcoming-requirements/
+- Faixa de deployment dos Xcodes — https://developer.apple.com/support/xcode/
+- Privacy manifest e required-reason APIs — https://developer.apple.com/documentation/bundleresources/privacy-manifest-files
+- App Privacy e URL de privacidade obrigatória — https://developer.apple.com/help/app-store-connect/manage-app-information/manage-app-privacy/
+- `ITSAppUsesNonExemptEncryption` — https://developer.apple.com/documentation/bundleresources/information-property-list/itsappusesnonexemptencryption
+- Ícones (1024 px, variantes, Liquid Glass) — https://developer.apple.com/design/human-interface-guidelines/app-icons
+- Diretrizes 2.3.7, 4.2, 4.2.3(i), 4.3(b), 5.1.1, 5.2.1 — https://developer.apple.com/app-store/review/guidelines/
+- `openURL` não exige `LSApplicationQueriesSchemes` — https://developer.apple.com/documentation/uikit/uiapplication/canopenurl(_:)
+- Classificação etária (4+, 9+, 13+, 16+, 18+) — https://developer.apple.com/help/app-store-connect/reference/age-ratings-values-and-definitions/
+- Screenshots (6,9"/6,5") — https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications/
+
+### React Native (npm, 27/09/2026)
+
+- `react-native@latest` = 0.87.1 (26/08/2026): React 19.2, Node ≥ 22.13, iOS 15.1, minSdk 24, targetSdk 36,
+  compileSdk 37, AGP 9.2.1, Gradle 9.4.1, JDK 17; template com `newArchEnabled=true`, `edgeToEdgeEnabled=true`
+  e `PrivacyInfo.xcprivacy` — https://reactnative.dev/blog/2026/08/11/react-native-0.87
+- Nova Arquitetura obrigatória desde 0.82 — https://reactnative.dev/blog/2025/10/08/react-native-0.82
+- Flipper removido na 0.74 — https://reactnative.dev/blog/2024/04/22/release-0.74
+- `react-native-mask-input` 1.2.3 é 100% JavaScript (deve funcionar na Nova Arquitetura; validar em runtime)
+- `react-native-safe-area-context` 5.10.0 · `styled-components` 6.5.3

@@ -10,6 +10,7 @@
 | [`03-marca-design-system.png`](prints/03-marca-design-system.png) | Logotipo, ícones, cores, tipografia, componentes |
 | [`04-abertura-splash.png`](prints/04-abertura-splash.png) | Tela de abertura iOS/Android nos dois temas |
 | [`05-propostas-melhoria.png`](prints/05-propostas-melhoria.png) | Melhorias funcionais sugeridas (fora do escopo até aprovação) |
+| [`06-materiais-lojas.png`](prints/06-materiais-lojas.png) | Screenshots de divulgação e imagem de destaque do Play |
 | [`telas/`](prints/telas/) | Telas individuais em 2x |
 
 Os mockups são gerados a partir de [`src/mockups.html`](src/mockups.html) (HTML/CSS com os mesmos tokens do
@@ -225,7 +226,7 @@ Fontes do sistema (SF Pro / Roboto): zero peso extra no app e suporte a tamanho 
 
 ### 5.4 Componentes
 
-- **AppHeader** — ícone 30 pt + "Sem salvar".
+- **AppHeader** — ícone 30 pt + "Sem salvar" + link de texto "Privacidade" à direita (exigência das lojas; abre a política no navegador).
 - **PhoneField** — cartão com rótulo, indicador `🇧🇷 +55`, valor com máscara `(00) 00000-0000`, cursor na cor
   primária, estados: focado (padrão), preenchido, erro (proposta).
 - **PrimaryButton** — pílula, ícone ↗ à direita, estados normal/pressionado (e desabilitado, se aprovada a
@@ -236,7 +237,7 @@ Fontes do sistema (SF Pro / Roboto): zero peso extra no app e suporte a tamanho 
 
 ```
 ┌──────────────────────────────┐
-│ [ícone] Sem salvar           │  AppHeader
+│ [ic] Sem salvar  Privacidade │  AppHeader
 │                              │
 │ Converse sem salvar          │  title
 │ o contato                    │
@@ -258,10 +259,101 @@ Comportamento **idêntico ao atual**: foco automático, teclado `phone-pad`, má
 teclado (Android) abre a conversa, botão abre a conversa, alertas nativos para número inválido e WhatsApp
 não instalado, campo é limpo depois de abrir, tema segue o sistema.
 
-Mudanças puramente visuais/de layout: `SafeAreaView` + `KeyboardAvoidingView` (necessários no Android 15+
+Mudanças puramente visuais/de layout: *safe area* + `KeyboardAvoidingView` (necessários no Android 15+
 edge-to-edge), `StatusBar` na cor do tema, textos de apoio, rótulos de acessibilidade para leitores de tela.
+Único acréscimo: o link **"Privacidade"**, exigido por Apple (5.1.1) e Google Play (seção 7).
 
-<!-- LOJAS -->
+## 7. Lojas: o que precisa mudar para publicar
+
+Levantamento de setembro/2026 (fontes em [`PESQUISA.md`](PESQUISA.md#4-requisitos-das-lojas)).
+
+### 7.1 Diagnóstico
+
+| Situação atual | Exigência atual | Consequência |
+| --- | --- | --- |
+| React Native 0.72.4, AGP 7.4, Gradle 8.0 | Só o RN **0.77+** gera bibliotecas nativas alinhadas a 16 KB; API 36 exige AGP 8.9.1+ | **Não dá para atender o Play sem atualizar o RN.** Alvo: RN 0.87.1 (atual) |
+| `targetSdk 33` | Updates precisam de **`targetSdk 36`** desde 31/08/2026 (extensão possível até 01/11/2026); apps publicados abaixo de 35 deixam de aparecer para usuários novos em Androids mais recentes | O app hoje está **escondido** para boa parte dos novos usuários |
+| Sem tratamento de *safe area* | Com target 36 o **edge-to-edge é obrigatório** (sem opt-out) | Topo da tela ficaria sob a barra de status → o novo layout já prevê isso |
+| Splash = `windowBackground` com imagem | Android 12+ usa a **SplashScreen API** (cor sólida + ícone) | Hoje o Android 12+ mostra o ícone antigo recortado; será migrado |
+| Ícone PNG não adaptativo | Ícone adaptativo + camada monocromática (ícones temáticos) | Novo ícone em todos os formatos |
+| `versionCode 1`, Flipper, `newArchEnabled=false` | versionCode maior que o publicado; Flipper removido (0.74); Nova Arquitetura obrigatória (0.82) | Ajustes de build |
+| iOS: target 12.4, bundle ID de exemplo, **AppIcon vazio**, sem privacy manifest | Upload só com **Xcode 26 / SDK iOS 26** (desde 28/04/2026), target ≥ 15.1 (RN), `PrivacyInfo.xcprivacy`, ícone 1024 px | **O app hoje não pode ser enviado à App Store** |
+| `Info.plist` com `armv7`, `NSLocationWhenInUseUsageDescription` vazio, sem `ITSAppUsesNonExemptEncryption` | `arm64`, sem permissões sem uso, declarar criptografia isenta | Ajustes de plist |
+| Sem política de privacidade | **Obrigatória nas duas lojas**, com link na loja **e dentro do app**; Data safety e App Privacy preenchidos mesmo sem coleta | Link "Privacidade" no cabeçalho (já nos prints) + página pública |
+
+> ⚠️ **Urgente (fora do código):** o prazo da **verificação de desenvolvedor Android no Brasil é 30/09/2026**.
+> O Google diz registrar 99% dos apps automaticamente, mas vale confirmar no Play Console se o `com.chamazap`
+> está registrado.
+
+### 7.2 Android — checklist
+
+1. Atualizar para **React Native 0.87.1** (React 19.2, Nova Arquitetura, Hermes). Para um app deste tamanho, o
+   caminho mais seguro é gerar o projeto nativo novo pelo template oficial e portar `src/`, mantendo
+   **`applicationId com.chamazap`** (não pode mudar, senão vira outro app no Play) e o mesmo keystore de upload.
+2. `minSdk 24`, `targetSdk 36`, `compileSdk 37`, AGP/Gradle/Kotlin do template, JDK 17, Node ≥ 22.13.
+3. Edge-to-edge: `react-native-safe-area-context` + `KeyboardAvoidingView`; `windowSoftInputMode="adjustResize"`.
+4. Splash: `Theme.SplashScreen` (`androidx.core:core-splashscreen`) com fundo `#F5F7F6`/`#0B1110` e o ícone.
+5. Ícone adaptativo (`mipmap-anydpi-v26`: frente, fundo e monocromático) gerado a partir do SVG.
+6. Nome "Sem salvar"; `versionCode` 2+ e `versionName` 2.0.0; remover Flipper e Jetifier.
+7. Senhas do keystore fora do repositório (hoje `gradle.properties` tem placeholders versionados).
+8. Validar o alinhamento de 16 KB no AAB (App Bundle Explorer / `bundletool`).
+9. Play Console: política de privacidade, Data safety ("não coleta, não compartilha"), sem anúncios, público-alvo
+   adulto, classificação IARC, nova listagem, ícone 512 px, imagem de destaque 1024×500, screenshots.
+
+### 7.3 iOS — checklist
+
+1. Bundle ID próprio (**decisão sua**, ex.: `com.chamazap` ou `br.com.semsalvar`), nome "Sem salvar",
+   iPhone-only em retrato (evita exigência de layout e screenshots de iPad).
+2. Deployment target 15.1; build com **Xcode 26+**.
+3. `PrivacyInfo.xcprivacy` (motivos FileTimestamp `C617.1`, UserDefaults `CA92.1`, SystemBootTime `35F9.1`;
+   sem coleta; sem rastreamento).
+4. `Info.plist`: `ITSAppUsesNonExemptEncryption = NO`, `arm64`, remover permissão de localização vazia,
+   região `pt-BR`. `LSApplicationQueriesSchemes` **não** é necessário (o app usa `openURL`, não `canOpenURL`).
+5. AppIcon 1024 px (claro, escuro e tingido) e LaunchScreen com o ícone sobre a cor do tema.
+6. App Store Connect: App Privacy "Dados não coletados", URL de privacidade, novo questionário de classificação
+   etária (deve resultar em 4+), screenshots 6,9"/6,5", status de *trader* (DSA) ou excluir a UE.
+
+### 7.4 Risco de rejeição na App Store (importante)
+
+A Apple pode rejeitar o app como está pelas diretrizes **4.2.3(i)** ("o app deve funcionar sozinho, sem exigir
+outro app instalado"), **4.2** (funcionalidade mínima) e **4.3(b)** (há muitos apps iguais). Isso é uma
+avaliação de risco, não uma regra escrita para esse tipo de app — mas é o ponto que mais pode travar a
+publicação. O que reduz o risco:
+
+- **Abrir via `https://wa.me/…`** (B5): se o WhatsApp não estiver instalado, abre a página oficial em vez de erro.
+- **Funções que agregam valor**: validação no campo, colar número, recentes, WhatsApp/Business (seção 8).
+- **Nota para o revisor** explicando o caso de uso (falar com quem você não quer salvar na agenda).
+
+Recomendo aprovar ao menos **B1, B4, B5 e a validação no campo** junto com o redesign.
+
+### 7.5 Textos das lojas (rascunho para aprovação)
+
+| Campo | Google Play | App Store |
+| --- | --- | --- |
+| Nome | **Sem salvar: chat sem contato** (28/30) | **Sem salvar** (10/30) |
+| Subtítulo / descrição curta | Abra conversas no WhatsApp sem salvar o número na agenda. Rápido e sem anúncios. (80/80) | Converse sem salvar o contato (29/30) |
+| Palavras-chave (só iOS) | — | `zap,contato,número,conversa,chat,direto,agenda,ddd,mensagem,telefone,rápido,chamar,desconhecido` (95/100) |
+| Categoria | Comunicação | Utilitários (principal) · Social Networking (secundária) |
+
+A palavra "WhatsApp" fica **fora do nome, do ícone e das palavras-chave** (diretriz 2.3.7 da Apple e política
+de propriedade intelectual do Play) e aparece só de forma descritiva no texto, com o aviso de não afiliação.
+"zap" é gíria genérica e ajuda na busca; se preferir risco zero, trocamos por "celular".
+
+**Descrição completa (Play e App Store):**
+
+> Precisa mandar mensagem para alguém, mas não quer salvar o número na agenda?
+> Com o **Sem salvar** você digita o número com DDD e a conversa abre direto no WhatsApp. Pronto.
+>
+> • Rápido: o teclado já abre pronto para digitar.
+> • Simples: só o número com DDD — o +55 é automático.
+> • Privado: o número não fica salvo na agenda nem no app. Sem cadastro, sem anúncios, sem permissões.
+> • Confortável: modo claro e escuro, letras grandes e alto contraste.
+>
+> Ideal para responder clientes, falar com vendedores de anúncios, confirmar entregas e serviços — sem encher
+> a agenda de contatos que você nunca mais vai usar.
+>
+> O Sem salvar não é afiliado, patrocinado ou endossado pelo WhatsApp ou pela Meta. WhatsApp é uma marca
+> registrada da WhatsApp LLC.
 
 ## 8. Melhorias funcionais propostas (não implementadas)
 
@@ -295,7 +387,7 @@ Além de melhorar a experiência, 2–7 reduzem o risco de rejeição na App Sto
 
 ## 9. Plano de implementação (após aprovação)
 
-1. **Plataforma** — atualizar React Native e toolchain, configurar Android (target/compile SDK, 16 KB,
+1. **Plataforma** — atualizar React Native (0.87.1) e toolchain, configurar Android (target/compile SDK, 16 KB,
    edge-to-edge, ícone adaptativo, SplashScreen API, nome) e iOS (bundle ID, nome, privacy manifest, ícones,
    LaunchScreen, iPhone-only/retrato, criptografia).
 2. **Design system** — `src/styles/themes` com os tokens acima (claro/escuro) + tipografia/espaçamento.
@@ -304,4 +396,15 @@ Além de melhorar a experiência, 2–7 reduzem o risco de rejeição na App Sto
 4. **Ativos** — ícones iOS/Android gerados a partir do SVG, splash, ícone 512 px e feature graphic do Play.
 5. **Loja** — textos de listagem (pt-BR), política de privacidade, respostas de privacidade/Data safety,
    roteiro de screenshots.
-6. **Verificação** — lint, typecheck, testes e builds.
+6. **Verificação** — lint, typecheck e testes aqui; os builds Android/iOS e o teste em aparelho precisam ser
+   feitos na sua máquina (este ambiente não tem Android SDK nem Xcode). Deixo o passo a passo no README.
+
+## 10. Decisões que preciso de você
+
+1. **Layout** — aprovar os prints (ou pedir ajustes).
+2. **Logotipo** — A "Direto" (recomendado), B ou C.
+3. **Melhorias funcionais** — quais itens da seção 8 entram (recomendo B1, B4, B5 e validação no campo).
+4. **Bundle ID do iOS** — ex.: `com.chamazap`.
+5. **Política de privacidade** — posso publicá-la via GitHub Pages deste repositório (precisa ativar Pages) ou
+   você indica outra URL.
+6. **Textos da loja** — aprovar ou ajustar a seção 7.5.

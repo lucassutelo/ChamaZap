@@ -64,6 +64,8 @@ body.boardbg-dark { background:#0E1311; color:#E6ECE9; }
 .appbar { height:52px; display:flex; align-items:center; gap:10px; padding:0 20px; flex:none; }
 .appbar img { width:30px; height:30px; border-radius:8px; }
 .appbar .name { font-size:17px; font-weight:700; letter-spacing:-.2px; }
+.appbar .link { margin-left:auto; font-size:15px; font-weight:500; color:var(--text-2); padding:12px 0 12px 12px; }
+.android .appbar .link { font-size:14px; letter-spacing:.1px; }
 .android .appbar { height:60px; padding:0 20px; }
 .android .appbar .name { font-size:18px; font-weight:500; letter-spacing:0; }
 .content { padding:12px 20px 0; display:flex; flex-direction:column; }
@@ -280,7 +282,7 @@ function field({state='empty', value='', error=false, countryChev=false}) {
 function homeContent(o) {
   const {state='empty', value='(11) 98765-4321'} = o;
   return `
-    <div class="appbar"><img src="${LOGO}"><span class="name">Sem salvar</span></div>
+    <div class="appbar"><img src="${LOGO}"><span class="name">Sem salvar</span><span class="link">Privacidade</span></div>
     <div class="content grow">
       <h2 class="title">Converse sem salvar o&nbsp;contato</h2>
       <p class="lead">Digite o número com DDD. A conversa abre direto no WhatsApp.</p>
@@ -327,7 +329,7 @@ function splash(platform, theme) {
 /* ---------- proposals ---------- */
 function propInline(theme) {
   const body = `
-    <div class="appbar"><img src="${LOGO}"><span class="name">Sem salvar</span></div>
+    <div class="appbar"><img src="${LOGO}"><span class="name">Sem salvar</span><span class="link">Privacidade</span></div>
     <div class="content grow">
       <h2 class="title">Converse sem salvar o&nbsp;contato</h2>
       <p class="lead">Digite o número com DDD. A conversa abre direto no WhatsApp.</p>
@@ -341,7 +343,7 @@ function propInline(theme) {
 function propPasteRecents(theme) {
   const rec = [['(11) 98765-4321','Hoje, 14:32'],['(21) 99123-8876','Ontem'],['(31) 3274-1190','12 set']];
   const body = `
-    <div class="appbar"><img src="${LOGO}"><span class="name">Sem salvar</span></div>
+    <div class="appbar"><img src="${LOGO}"><span class="name">Sem salvar</span><span class="link">Privacidade</span></div>
     <div class="content">
       <h2 class="title">Converse sem salvar o&nbsp;contato</h2>
       ${field({state:'empty'})}
