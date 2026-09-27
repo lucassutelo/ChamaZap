@@ -1,7 +1,8 @@
 # Sem salvar — Proposta de redesign
 
-> Status: **aguardando aprovação**. Nada no código do app foi alterado ainda. Este documento, os prints em
-> [`prints/`](prints/) e os arquivos de logotipo em [`logo/`](logo/) são a proposta para validação.
+> Status: **aprovado e implementado** (versão 2.0.0). Decisões: logotipo A "Direto", bundle ID iOS
+> `com.chamazap` e as melhorias recomendadas B1, B3, B4, B5 + validação no campo (seção 8). O passo a passo de
+> publicação está em [`store/README.md`](../../store/README.md).
 
 | Print | Conteúdo |
 | --- | --- |
@@ -399,12 +400,14 @@ Além de melhorar a experiência, 2–7 reduzem o risco de rejeição na App Sto
 6. **Verificação** — lint, typecheck e testes aqui; os builds Android/iOS e o teste em aparelho precisam ser
    feitos na sua máquina (este ambiente não tem Android SDK nem Xcode). Deixo o passo a passo no README.
 
-## 10. Decisões que preciso de você
+## 10. Decisões (tomadas na aprovação)
 
-1. **Layout** — aprovar os prints (ou pedir ajustes).
-2. **Logotipo** — A "Direto" (recomendado), B ou C.
-3. **Melhorias funcionais** — quais itens da seção 8 entram (recomendo B1, B4, B5 e validação no campo).
-4. **Bundle ID do iOS** — ex.: `com.chamazap`.
-5. **Política de privacidade** — posso publicá-la via GitHub Pages deste repositório (precisa ativar Pages) ou
-   você indica outra URL.
-6. **Textos da loja** — aprovar ou ajustar a seção 7.5.
+1. **Layout** — aprovado como nos prints; no estado vazio o botão aparece apagado por causa da validação no campo.
+2. **Logotipo** — A "Direto".
+3. **Melhorias funcionais** — B1, B4, B5 e validação no campo; a máscara dinâmica (B3) veio junto, porque o
+   campo passou a formatar o número sem biblioteca. B2 (remoção do 9) foi **mantido** até ser testado em campo;
+   as funções novas 2–7 ficam para uma próxima versão.
+4. **Bundle ID do iOS** — `com.chamazap`.
+5. **Política de privacidade** — [`docs/privacidade/`](../privacidade/index.html), publicada via GitHub Pages
+   (ativar em *Settings → Pages → main /docs*).
+6. **Textos da loja** — [`store/README.md`](../../store/README.md).
