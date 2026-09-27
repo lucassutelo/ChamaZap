@@ -1,54 +1,44 @@
+import { Platform } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
-import MaskInput from 'react-native-mask-input';
+import { spacing } from '../../styles/tokens';
 
-export const Container = styled.View`
-    display: flex;
+export const Screen = styled(SafeAreaView)`
     flex: 1;
     background-color: ${props => props.theme.background};
-    align-items: center;
-    align-content: center;
-    justify-content: flex-start;
 `;
 
-export const BoxLogo = styled.View`
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    width: 100%;
-    margin-top: 40px;
-    margin-bottom: 30px;
+export const Body = styled.KeyboardAvoidingView`
+    flex: 1;
 `;
 
-export const BoxActions = styled.View`
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    width: 100%;
+export const Content = styled.ScrollView.attrs({
+    contentContainerStyle: {
+        paddingTop: spacing.md,
+        paddingHorizontal: spacing.xl,
+        paddingBottom: spacing.lg,
+    },
+    keyboardShouldPersistTaps: 'handled',
+    showsVerticalScrollIndicator: false,
+})`
+    flex: 1;
 `;
 
-export const Input = styled(MaskInput)`
-    border: 2px solid ${props => props.theme.description};
-    height: 80px;
-    width: 80%;
-    border-radius: 10px;
-    padding-left: 14px;
-    padding-right: 14px;
-    color: ${props => props.theme.color};
-    font-size: 34px;
+export const Title = styled.Text`
+    color: ${props => props.theme.text};
+    font-size: 28px;
+    line-height: 34px;
+    font-weight: 700;
+    letter-spacing: ${Platform.OS === 'ios' ? -0.4 : 0}px;
 `;
 
-export const Button = styled.TouchableOpacity`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #03a23d;
-    height: 60px;
-    width: 80%;
-    border-radius: 6px;
-    margin-top: 10px;
+export const Lead = styled.Text`
+    margin-top: ${spacing.sm}px;
+    color: ${props => props.theme.textSecondary};
+    font-size: 16px;
+    line-height: 22px;
 `;
 
-export const ButtonTxt = styled.Text`
-    color: #fff;
-    font-size: 26px;
+export const Footer = styled.View`
+    padding: 0 ${spacing.xl}px ${spacing.lg}px;
 `;
