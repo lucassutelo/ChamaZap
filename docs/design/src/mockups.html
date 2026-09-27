@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Sem salvar — mockups</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&family=Roboto+Flex:opsz,wght@8..144,400..800&family=Plus+Jakarta+Sans:wght@600;700;800&display=block" rel="stylesheet">
+<style>
+/* ===== Design tokens (fonte da verdade: docs/design/PROPOSTA.md) ===== */
+.t-light {
+  --bg:#F5F7F6; --surface:#FFFFFF; --surface-2:#EEF2F0; --border:#DCE3E0; --outline:#8A9791;
+  --text:#0F1A16; --text-2:#52605A; --text-3:#6B7872;
+  --primary:#0A7D55; --primary-pressed:#086646; --on-primary:#FFFFFF; --primary-soft:#E3F4EC;
+  --focus-ring:rgba(10,125,85,.16); --danger:#C62828; --danger-soft:#FDECEC;
+  --shadow:0 1px 2px rgba(15,26,22,.06),0 6px 20px rgba(15,26,22,.06);
+  --kb-bg:#D3D6DB; --kb-key:#FFFFFF; --kb-key-fn:#ADB3BC; --kb-text:#000; --kb-shadow:0 1px 0 #8C8F94;
+  --ak-bg:#EDF1EF; --ak-key:#FFFFFF; --ak-fn:#D5E3DC; --ak-text:#1B1F1D; --ak-accent:#0A7D55; --ak-on-accent:#fff;
+  --status:#0F1A16;
+}
+.t-dark {
+  --bg:#0B1110; --surface:#141C1A; --surface-2:#1B2522; --border:#25302C; --outline:#5E6D67;
+  --text:#EEF3F1; --text-2:#A3B1AB; --text-3:#7F8D87;
+  --primary:#2FD694; --primary-pressed:#25B97F; --on-primary:#04241A; --primary-soft:#12291F;
+  --focus-ring:rgba(47,214,148,.20); --danger:#FF7A73; --danger-soft:#2A1614;
+  --shadow:none;
+  --kb-bg:#2C2C2E; --kb-key:#636366; --kb-key-fn:#3A3A3C; --kb-text:#fff; --kb-shadow:0 1px 0 #1a1a1a;
+  --ak-bg:#1A211F; --ak-key:#2B3431; --ak-fn:#23302B; --ak-text:#E6ECE9; --ak-accent:#2FD694; --ak-on-accent:#04241A;
+  --status:#EEF3F1;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:Inter, system-ui, sans-serif; background:#E7EBE9; color:#0F1A16; -webkit-font-smoothing:antialiased; }
+body.boardbg-dark { background:#0E1311; color:#E6ECE9; }
+
+/* ===== Board ===== */
+.board { padding:56px 64px 64px; display:flex; flex-direction:column; gap:40px; width:max-content; }
+.board-head { display:flex; align-items:center; gap:16px; }
+.board-head img { width:56px; height:56px; border-radius:13px; }
+.board-head h1 { font-family:'Plus Jakarta Sans'; font-size:34px; font-weight:800; letter-spacing:-.5px; }
+.board-head p { font-size:17px; color:#52605A; margin-top:2px; }
+.row { display:flex; gap:48px; align-items:flex-start; }
+.cell { display:flex; flex-direction:column; gap:16px; align-items:center; }
+.cap { font-size:16px; font-weight:600; color:#2A3531; text-align:center; max-width:420px; }
+.cap small { display:block; font-weight:400; color:#5A6862; font-size:14px; margin-top:4px; line-height:1.4; }
+.tag { display:inline-block; font-size:12px; font-weight:700; letter-spacing:.6px; text-transform:uppercase; padding:4px 10px; border-radius:99px; background:#DDEFE7; color:#0A5C40; margin-bottom:6px; }
+.tag.warn { background:#FFF1D6; color:#7A4B00; }
+.tag.old { background:#E4E4E4; color:#555; }
+
+/* ===== Phone frames ===== */
+.phone { position:relative; border-radius:62px; padding:12px; background:#101312; box-shadow:0 0 0 2px #2b302e inset, 0 30px 60px rgba(0,0,0,.18); }
+.phone.android { border-radius:44px; padding:10px; }
+.scr { position:relative; width:390px; height:844px; border-radius:50px; overflow:hidden; background:var(--bg); color:var(--text); display:flex; flex-direction:column; }
+.android .scr { width:412px; height:915px; border-radius:34px; font-family:Roboto, sans-serif; }
+.island { position:absolute; top:11px; left:50%; transform:translateX(-50%); width:124px; height:36px; border-radius:20px; background:#000; z-index:5; }
+.punch { position:absolute; top:12px; left:50%; transform:translateX(-50%); width:22px; height:22px; border-radius:50%; background:#000; z-index:5; }
+.sb { height:54px; display:flex; align-items:center; justify-content:space-between; padding:6px 30px 0 44px; font-weight:600; font-size:17px; color:var(--status); flex:none; }
+.android .sb { height:40px; padding:4px 22px 0 26px; font-size:14px; font-weight:500; }
+.sb .icons { display:flex; gap:6px; align-items:center; }
+.home-ind { position:absolute; bottom:8px; left:50%; transform:translateX(-50%); width:136px; height:5px; border-radius:3px; background:var(--status); opacity:.9; z-index:6; }
+.gesture { height:26px; display:flex; align-items:center; justify-content:center; flex:none; }
+.gesture i { width:110px; height:4px; border-radius:2px; background:var(--ak-text); opacity:.55; }
+
+/* ===== App: Home ===== */
+.app { flex:1; display:flex; flex-direction:column; min-height:0; }
+.appbar { height:52px; display:flex; align-items:center; gap:10px; padding:0 20px; flex:none; }
+.appbar img { width:30px; height:30px; border-radius:8px; }
+.appbar .name { font-size:17px; font-weight:700; letter-spacing:-.2px; }
+.android .appbar { height:60px; padding:0 20px; }
+.android .appbar .name { font-size:18px; font-weight:500; letter-spacing:0; }
+.content { padding:12px 20px 0; display:flex; flex-direction:column; }
+.content.grow { flex:1; padding-bottom:16px; }
+.android .content { padding:12px 20px 0; }
+h2.title { font-size:28px; line-height:34px; font-weight:750; letter-spacing:-.6px; }
+.android h2.title { font-family:'Roboto Flex', Roboto, sans-serif; font-size:28px; line-height:36px; font-weight:600; letter-spacing:-.2px; }
+.lead { margin-top:8px; font-size:16px; line-height:22px; color:var(--text-2); }
+.android .lead { font-size:16px; line-height:24px; letter-spacing:.1px; }
+
+.field { margin-top:24px; background:var(--surface); border:1.5px solid var(--outline); border-radius:20px; padding:12px 14px 12px 16px; box-shadow:var(--shadow); }
+.field.focus { border:2px solid var(--primary); box-shadow:0 0 0 4px var(--focus-ring); padding:11.5px 13.5px 11.5px 15.5px; }
+.field.error { border:2px solid var(--danger); box-shadow:0 0 0 4px var(--danger-soft); padding:11.5px 13.5px 11.5px 15.5px; }
+.android .field { border-radius:16px; }
+.flabel { font-size:13px; line-height:18px; font-weight:600; color:var(--text-2); letter-spacing:.1px; }
+.field.focus .flabel { color:var(--primary); }
+.field.error .flabel { color:var(--danger); }
+.ftop { display:flex; align-items:center; justify-content:space-between; height:26px; }
+.frow { display:flex; align-items:center; margin-top:4px; height:42px; }
+.cc { display:flex; align-items:center; gap:5px; height:26px; padding:0 9px 0 7px; border-radius:8px; background:var(--surface-2); font-size:14px; font-weight:600; color:var(--text); font-variant-numeric:tabular-nums; flex:none; }
+.cc .flag { font-family:'Noto Color Emoji'; font-size:14px; }
+.cc .chev { opacity:.6; margin-left:-2px; }
+.val { font-size:30px; font-weight:600; letter-spacing:.3px; font-variant-numeric:tabular-nums; display:flex; align-items:center; white-space:nowrap; }
+.android .val { font-size:30px; font-weight:500; letter-spacing:.2px; }
+.val.ph { color:var(--text-3); font-weight:500; }
+.caret { width:2.5px; height:34px; background:var(--primary); border-radius:2px; margin:0 1px; }
+.clear { margin-left:auto; color:var(--text-3); display:flex; }
+.helper { margin-top:10px; font-size:13px; line-height:18px; color:var(--text-2); display:flex; gap:6px; align-items:center; padding:0 4px; }
+.helper.err { color:var(--danger); font-weight:500; }
+
+.btn { margin-top:14px; height:56px; border-radius:999px; background:var(--primary); color:var(--on-primary); display:flex; align-items:center; justify-content:center; gap:8px; font-size:17px; font-weight:650; letter-spacing:-.1px; flex:none; }
+.android .btn { font-size:16px; font-weight:500; letter-spacing:.1px; }
+.btn.disabled { background:var(--surface-2); color:var(--text-3); }
+.btn.pressed { background:var(--primary-pressed); }
+.note { margin-top:14px; display:flex; align-items:center; justify-content:center; gap:6px; font-size:13px; line-height:18px; color:var(--text-2); }
+.spacer { flex:1; }
+
+/* chips / proposals */
+.chip { display:inline-flex; align-items:center; gap:8px; height:40px; padding:0 14px 0 12px; border-radius:12px; background:var(--primary-soft); color:var(--primary); font-weight:600; font-size:14px; margin-top:12px; align-self:flex-start; }
+.t-dark .chip { color:var(--primary); }
+.section-h { margin-top:24px; display:flex; justify-content:space-between; align-items:center; font-size:13px; font-weight:700; color:var(--text-2); letter-spacing:.4px; text-transform:uppercase; }
+.section-h a { text-transform:none; letter-spacing:0; font-weight:600; color:var(--primary); font-size:14px; }
+.list { margin-top:8px; background:var(--surface); border-radius:16px; border:1px solid var(--border); overflow:hidden; }
+.li { display:flex; align-items:center; gap:12px; padding:12px 14px; border-top:1px solid var(--border); }
+.li:first-child { border-top:none; }
+.avatar { width:36px; height:36px; border-radius:50%; background:var(--surface-2); display:flex; align-items:center; justify-content:center; color:var(--text-2); flex:none; }
+.li .num { font-size:16px; font-weight:600; font-variant-numeric:tabular-nums; }
+.li .when { font-size:13px; color:var(--text-2); margin-top:1px; }
+.li .go { margin-left:auto; color:var(--primary); }
+
+.scrim { position:absolute; inset:0; background:rgba(0,0,0,.38); z-index:8; }
+.sheet { position:absolute; left:0; right:0; bottom:0; background:var(--surface); border-radius:28px 28px 0 0; z-index:9; padding:10px 20px 34px; }
+.grabber { width:40px; height:5px; border-radius:3px; background:var(--outline); opacity:.5; margin:0 auto 14px; }
+.sheet h3 { font-size:20px; font-weight:700; letter-spacing:-.3px; }
+.sheet p { font-size:15px; color:var(--text-2); margin-top:4px; line-height:21px; }
+.opt { display:flex; align-items:center; gap:14px; padding:14px; border-radius:16px; border:1.5px solid var(--border); margin-top:12px; }
+.opt.sel { border:2px solid var(--primary); background:var(--primary-soft); padding:13.5px; }
+.opt .ic { width:44px; height:44px; border-radius:12px; background:var(--surface-2); display:flex; align-items:center; justify-content:center; color:var(--primary); }
+.opt b { font-size:16px; display:block; }
+.opt span { font-size:13px; color:var(--text-2); }
+.radio { margin-left:auto; width:22px; height:22px; border-radius:50%; border:2px solid var(--outline); }
+.opt.sel .radio { border:7px solid var(--primary); }
+.search { display:flex; align-items:center; gap:8px; height:44px; border-radius:12px; background:var(--surface-2); padding:0 12px; color:var(--text-3); font-size:16px; margin-top:14px; }
+.country { display:flex; align-items:center; gap:12px; padding:12px 4px; border-bottom:1px solid var(--border); font-size:16px; }
+.country .flag { font-family:'Noto Color Emoji'; font-size:22px; }
+.country .code { margin-left:auto; color:var(--text-2); font-variant-numeric:tabular-nums; }
+.country.sel { color:var(--primary); font-weight:600; }
+
+/* ===== iOS keyboard (phone pad) ===== */
+.kb { background:var(--kb-bg); padding:7px 6px 0; flex:none; height:282px; position:relative; }
+.kb-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:7px 6px; }
+.k { height:50px; border-radius:8px; background:var(--kb-key); box-shadow:var(--kb-shadow); color:var(--kb-text); display:flex; flex-direction:column; align-items:center; justify-content:center; line-height:1; }
+.k b { font-size:26px; font-weight:400; font-family:Inter; }
+.k s { text-decoration:none; font-size:9.5px; font-weight:700; letter-spacing:2px; margin-top:2px; }
+.k.fn { background:transparent; box-shadow:none; }
+.k.fn b { font-size:18px; letter-spacing:4px; }
+
+/* ===== Android keyboard (Gboard-like phone pad) ===== */
+.akb { background:var(--ak-bg); flex:none; padding:0 8px; }
+.akb-top { height:44px; display:flex; align-items:center; justify-content:space-between; padding:0 10px; color:var(--ak-text); opacity:.7; }
+.akb-grid { display:grid; grid-template-columns:1fr 1fr 1fr .78fr; gap:6px; padding-bottom:10px; }
+.ak { height:54px; border-radius:10px; background:var(--ak-key); color:var(--ak-text); display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:Roboto; line-height:1; }
+.ak b { font-size:24px; font-weight:400; }
+.ak s { text-decoration:none; font-size:10px; letter-spacing:1.5px; opacity:.7; margin-top:3px; }
+.ak.fn { background:var(--ak-fn); }
+.ak.accent { background:var(--ak-accent); color:var(--ak-on-accent); border-radius:18px; }
+
+/* ===== OLD design (antes) ===== */
+.old .app { align-items:center; }
+.old-logo { margin-top:40px; margin-bottom:30px; width:150px; height:150px; }
+.old-input { width:80%; height:80px; border-radius:10px; border:2px solid var(--old-border); display:flex; align-items:center; padding:0 14px; font-size:34px; color:#BBB; font-family:Roboto; }
+.old-btn { width:80%; height:60px; border-radius:6px; background:#03a23d; color:#fff; font-size:26px; display:flex; align-items:center; justify-content:center; margin-top:10px; font-family:Roboto; }
+.t-old-light { --bg:#FFF; --text:#000; --old-border:#222; --status:#000; --kb-bg:#D3D6DB; --kb-key:#FFF; --kb-text:#000; --kb-shadow:0 1px 0 #8C8F94; }
+.t-old-dark { --bg:#000; --text:#FFF; --old-border:#DDD; --status:#FFF; --kb-bg:#2C2C2E; --kb-key:#636366; --kb-text:#fff; --kb-shadow:0 1px 0 #1a1a1a; }
+
+/* ===== Splash ===== */
+.splash { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px; }
+.splash img.ios { width:112px; height:112px; border-radius:26px; }
+.splash .amask { width:192px; height:192px; border-radius:50%; overflow:hidden; display:flex; }
+.splash .amask img { width:100%; height:100%; }
+.splash .wm { font-family:'Plus Jakarta Sans'; font-weight:800; font-size:26px; letter-spacing:-.5px; }
+
+/* ===== Brand board ===== */
+.card { background:#fff; border-radius:28px; padding:32px; box-shadow:0 1px 2px rgba(0,0,0,.04), 0 10px 30px rgba(0,0,0,.05); }
+.card h3 { font-family:'Plus Jakarta Sans'; font-size:22px; font-weight:800; letter-spacing:-.3px; margin-bottom:4px; }
+.card .sub { color:#5A6862; font-size:15px; margin-bottom:22px; }
+.lockup { display:flex; align-items:center; gap:20px; }
+.lockup img { width:120px; height:120px; border-radius:27px; }
+.lockup .wm { font-family:'Plus Jakarta Sans'; font-weight:800; font-size:64px; letter-spacing:-2px; color:#0B2A20; }
+.lockup .wm.inv { color:#EEF3F1; }
+.lockup .tl { font-size:18px; color:#52605A; margin-top:2px; }
+.alts { display:flex; gap:28px; }
+.alt { display:flex; flex-direction:column; align-items:center; gap:10px; font-size:14px; color:#3b4843; text-align:center; width:170px; }
+.alt img { width:132px; height:132px; border-radius:30px; }
+.alt.rec img { outline:4px solid #0A7D55; outline-offset:5px; }
+.homes { display:flex; gap:20px; }
+.hs { width:250px; height:250px; border-radius:24px; display:grid; grid-template-columns:repeat(3,1fr); gap:14px; padding:22px; align-content:start; }
+.hs .ico { display:flex; flex-direction:column; align-items:center; gap:6px; font-size:11px; font-weight:500; }
+.hs .ico i { width:60px; height:60px; border-radius:14px; display:block; }
+.hs .ico img { width:60px; height:60px; border-radius:14px; }
+.hs.android .ico i, .hs.android .ico img, .hs.android .ico .am { border-radius:50%; }
+.am { width:60px; height:60px; overflow:hidden; display:flex; align-items:center; justify-content:center; }
+.am img { width:60px !important; height:60px !important; border-radius:0 !important; flex:none; }
+.swatches { display:grid; grid-template-columns:repeat(6, 150px); gap:14px; }
+.sw { border-radius:16px; overflow:hidden; border:1px solid rgba(0,0,0,.08); }
+.sw .c { height:74px; display:flex; align-items:flex-end; padding:8px 10px; font-size:12px; font-weight:700; }
+.sw .m { padding:8px 10px 10px; font-size:12px; line-height:1.45; color:#3b4843; background:#fff; }
+.sw .m b { display:block; font-size:13px; color:#0F1A16; }
+.type-row { display:flex; align-items:baseline; gap:20px; padding:10px 0; border-top:1px solid #EEF2F0; }
+.type-row:first-child { border-top:none; }
+.type-row .spec { width:190px; flex:none; font-size:13px; color:#5A6862; font-variant-numeric:tabular-nums; }
+.comp-grid { display:grid; grid-template-columns:repeat(3, 330px); gap:18px; }
+.comp { border-radius:20px; padding:18px; background:var(--bg); color:var(--text); }
+.comp .lbl { font-size:12px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; color:var(--text-2); margin-bottom:10px; }
+.comp .field, .comp .btn { margin-top:0; }
+.grid2 { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+
+/* ===== Store assets ===== */
+.shot { width:430px; height:932px; position:relative; overflow:hidden; border-radius:18px; flex:none; }
+.shot.ink { background:radial-gradient(120% 70% at 20% 0%, #1B5A42 0%, #0B2A20 45%, #061A13 100%); color:#EEF3F1; }
+.shot.mint { background:radial-gradient(120% 70% at 80% 0%, #FFFFFF 0%, #E3F6EC 55%, #CDEFDD 100%); color:#0B2A20; }
+.shot > h3 { font-family:'Plus Jakarta Sans'; font-weight:800; font-size:36px; line-height:40px; letter-spacing:-1px; padding:56px 32px 0; }
+.shot > h3 em { font-style:normal; color:#2FD694; }
+.shot.mint > h3 em { color:#0A7D55; }
+.shot > p { font-size:17px; line-height:24px; padding:12px 32px 0; opacity:.8; }
+.shot .shotphone { position:absolute; left:50%; top:262px; transform:translateX(-50%) scale(.9); transform-origin:top center; }
+.fg { width:1024px; height:500px; border-radius:18px; overflow:hidden; position:relative; background:radial-gradient(90% 120% at 15% 10%, #1B5A42 0%, #0B2A20 50%, #061A13 100%); color:#EEF3F1; }
+.fg .l { position:absolute; left:72px; top:120px; }
+.fg .l img { width:96px; height:96px; border-radius:22px; }
+.fg .l .wm { font-family:'Plus Jakarta Sans'; font-weight:800; font-size:64px; letter-spacing:-2px; margin-top:22px; }
+.fg .l .tl { font-size:24px; opacity:.85; margin-top:6px; }
+.fg .shotphone { position:absolute; right:70px; top:52px; transform:rotate(-8deg) scale(.62); transform-origin:top right; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+const LOGO = '../logo/icon-a-direto.svg';
+const I = {
+  arrow: (s=20,w=2.4) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>`,
+  lock: (s=15) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10.5" width="15" height="10.5" rx="2.5"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg>`,
+  back: (s=26) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 5H9l-6.5 7L9 19h12a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1Z"/><path d="m12.5 9 5 6m0-6-5 6"/></svg>`,
+  send: (s=22) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="currentColor"><path d="M3.4 20.4 21 12 3.4 3.6 3.4 10l12 2-12 2z"/></svg>`,
+  clip: (s=18) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2.5" width="8" height="4" rx="1.2"/><path d="M16 4.5h1.5a2 2 0 0 1 2 2V19a2 2 0 0 1-2 2h-11a2 2 0 0 1-2-2V6.5a2 2 0 0 1 2-2H8"/></svg>`,
+  clock: (s=18) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>`,
+  alert: (s=16) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg>`,
+  chev: (s=14) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>`,
+  x: (s=20) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10" opacity=".35"/><path d="m9 9 6 6m0-6-6 6" stroke="var(--surface)" stroke-width="2.2" stroke-linecap="round"/></svg>`,
+  search: (s=18) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>`,
+  chat: (s=22) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 6.5A3.5 3.5 0 0 1 7.5 3h9A3.5 3.5 0 0 1 20 6.5v6a3.5 3.5 0 0 1-3.5 3.5H10l-5 4v-4.5A3.5 3.5 0 0 1 4 12.5Z"/></svg>`,
+  brief: (s=22) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M8.5 7V5.5A1.5 1.5 0 0 1 10 4h4a1.5 1.5 0 0 1 1.5 1.5V7M3 12.5h18"/></svg>`,
+  user: (s=18) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg>`,
+  mic: (s=20) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg>`,
+};
+const statusIcons = (android) => `
+  <svg width="${android?16:18}" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="5" y="5.5" width="3" height="6.5" rx=".8"/><rect x="10" y="3" width="3" height="9" rx=".8"/><rect x="15" y="0" width="3" height="12" rx=".8"/></svg>
+  <svg width="${android?16:17}" height="12" viewBox="0 0 17 12" fill="currentColor"><path d="M8.5 2.3c2.4 0 4.6.9 6.2 2.5l1.2-1.2A10.4 10.4 0 0 0 8.5.6 10.4 10.4 0 0 0 1.1 3.6l1.2 1.2A8.7 8.7 0 0 1 8.5 2.3Zm0 3.3c1.5 0 2.9.6 3.9 1.6l1.2-1.2a7.2 7.2 0 0 0-10.2 0l1.2 1.2c1-1 2.4-1.6 3.9-1.6Zm0 3.3c.6 0 1.2.3 1.6.7L8.5 11.2 6.9 9.6c.4-.4 1-.7 1.6-.7Z"/></svg>
+  ${android
+    ? `<svg width="10" height="16" viewBox="0 0 10 16" fill="currentColor"><rect x="3" y="0" width="4" height="2" rx=".5"/><rect x="0" y="1.5" width="10" height="14.5" rx="1.8"/></svg>`
+    : `<svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.8" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="20" height="9" rx="2.5" fill="currentColor"/><path d="M25 4.5v4c.8-.3 1.3-1.1 1.3-2s-.5-1.7-1.3-2Z" fill="currentColor" opacity=".4"/></svg>`}`;
+
+function iosKeyboard() {
+  const keys = [['1',''],['2','ABC'],['3','DEF'],['4','GHI'],['5','JKL'],['6','MNO'],['7','PQRS'],['8','TUV'],['9','WXYZ']];
+  return `<div class="kb"><div class="kb-grid">
+    ${keys.map(([n,l]) => `<div class="k"><b>${n}</b>${l?`<s>${l}</s>`:''}</div>`).join('')}
+    <div class="k fn"><b>+*#</b></div><div class="k"><b>0</b></div><div class="k fn">${I.back()}</div>
+  </div></div>`;
+}
+function androidKeyboard() {
+  const k = (n,l='',c='') => `<div class="ak ${c}"><b>${n}</b>${l?`<s>${l}</s>`:''}</div>`;
+  return `<div class="akb"><div class="akb-top">${I.chev(18).replace('m6 9 6 6 6-6','m6 15 6-6 6 6')}<span style="display:flex;gap:22px">${I.mic()}</span></div>
+  <div class="akb-grid">
+    ${k('1')}${k('2','ABC')}${k('3','DEF')}${k('−','','fn')}
+    ${k('4','GHI')}${k('5','JKL')}${k('6','MNO')}${k('␣','','fn')}
+    ${k('7','PQRS')}${k('8','TUV')}${k('9','WXYZ')}<div class="ak fn">${I.back(24)}</div>
+    ${k('*#','','fn')}${k('0','+')}${k('.','','fn')}<div class="ak accent">${I.send()}</div>
+  </div></div>`;
+}
+
+function field({state='empty', value='', error=false, countryChev=false}) {
+  const cls = error ? 'error' : 'focus';
+  const v = state === 'empty'
+    ? `<span class="caret"></span><span class="val ph">(11) 91234<span style="font-variant-numeric:normal;letter-spacing:-1px">-</span>5678</span>`
+    : `<span class="val">${value.replace('-', '<span style="font-variant-numeric:normal;letter-spacing:-1px">-</span>')}</span><span class="caret"></span>`;
+  return `<div class="field ${cls}">
+    <div class="ftop">
+      <span class="flabel">Número com DDD</span>
+      <span class="cc"><span class="flag">🇧🇷</span>+55${countryChev?`<span class="chev">${I.chev(12)}</span>`:''}</span>
+    </div>
+    <div class="frow">${v}</div>
+  </div>`;
+}
+
+function homeContent(o) {
+  const {state='empty', value='(11) 98765-4321'} = o;
+  return `
+    <div class="appbar"><img src="${LOGO}"><span class="name">Sem salvar</span></div>
+    <div class="content grow">
+      <h2 class="title">Converse sem salvar o&nbsp;contato</h2>
+      <p class="lead">Digite o número com DDD. A conversa abre direto no WhatsApp.</p>
+      ${field({state, value})}
+      <div class="helper">${I.lock(14)} O número não fica salvo na agenda nem no app.</div>
+      <div class="spacer"></div>
+      <div class="btn">Abrir conversa ${I.arrow()}</div>
+    </div>`;
+}
+
+function phone({platform='ios', theme='light', body='', keyboard=true, extra='', cls=''}) {
+  const android = platform === 'android';
+  return `<div class="phone ${android?'android':''} ${cls}"><div class="scr t-${theme}">
+    ${android?'<div class="punch"></div>':'<div class="island"></div>'}
+    <div class="sb"><span>${android?'9:41':'9:41'}</span><span class="icons">${statusIcons(android)}</span></div>
+    <div class="app">${body}</div>
+    ${keyboard ? (android ? androidKeyboard() : iosKeyboard()) : ''}
+    ${android ? `<div class="gesture" style="background:${keyboard?'var(--ak-bg)':'transparent'}"><i style="background:var(--${keyboard?'ak-text':'status'})"></i></div>` : '<div class="home-ind"></div>'}
+    ${extra}
+  </div></div>`;
+}
+
+function home(platform, theme, state='empty') {
+  return phone({platform, theme, body: homeContent({state})});
+}
+
+function oldHome(theme) {
+  return `<div class="phone old"><div class="scr t-old-${theme}" style="font-family:Roboto">
+    <div class="island"></div>
+    <div class="sb"><span>9:41</span><span class="icons">${statusIcons(false)}</span></div>
+    <div class="app"><img class="old-logo" src="../../../src/assets/2.png">
+      <div class="old-input">Digite o número</div><div class="old-btn">Abrir conversa</div></div>
+    ${iosKeyboard()}<div class="home-ind"></div></div></div>`;
+}
+
+function splash(platform, theme) {
+  const android = platform === 'android';
+  const body = android
+    ? `<div class="splash"><div class="amask" style="width:160px;height:160px;border-radius:50%"><img src="${LOGO}"></div></div>`
+    : `<div class="splash"><img class="ios" src="${LOGO}"></div>`;
+  return phone({platform, theme, body, keyboard:false});
+}
+
+/* ---------- proposals ---------- */
+function propInline(theme) {
+  const body = `
+    <div class="appbar"><img src="${LOGO}"><span class="name">Sem salvar</span></div>
+    <div class="content grow">
+      <h2 class="title">Converse sem salvar o&nbsp;contato</h2>
+      <p class="lead">Digite o número com DDD. A conversa abre direto no WhatsApp.</p>
+      ${field({state:'filled', value:'(11) 98765-43', error:true})}
+      <div class="helper err">${I.alert(15)} Número incompleto — faltam 2 dígitos</div>
+      <div class="spacer"></div>
+      <div class="btn disabled">Abrir conversa ${I.arrow()}</div>
+    </div>`;
+  return phone({platform:'ios', theme, body});
+}
+function propPasteRecents(theme) {
+  const rec = [['(11) 98765-4321','Hoje, 14:32'],['(21) 99123-8876','Ontem'],['(31) 3274-1190','12 set']];
+  const body = `
+    <div class="appbar"><img src="${LOGO}"><span class="name">Sem salvar</span></div>
+    <div class="content">
+      <h2 class="title">Converse sem salvar o&nbsp;contato</h2>
+      ${field({state:'empty'})}
+      <div class="chip">${I.clip(17)} Colar (47) 99612-0034</div>
+      <div class="btn">Abrir conversa ${I.arrow()}</div>
+      <div class="section-h"><span>Recentes</span><a>Limpar</a></div>
+      <div class="list">${rec.map(([n,w]) => `<div class="li"><div class="avatar">${I.clock(17)}</div><div><div class="num">${n}</div><div class="when">${w}</div></div><span class="go">${I.arrow(18)}</span></div>`).join('')}</div>
+    </div>`;
+  return phone({platform:'ios', theme, body, keyboard:false});
+}
+function propChooser(theme) {
+  const body = homeContent({state:'filled'});
+  const extra = `<div class="scrim"></div><div class="sheet"><div class="grabber"></div>
+    <h3>Abrir com</h3><p>Você tem os dois apps instalados. Escolha onde iniciar a conversa.</p>
+    <div class="opt sel"><div class="ic">${I.chat()}</div><div><b>WhatsApp</b><span>Conta pessoal</span></div><div class="radio"></div></div>
+    <div class="opt"><div class="ic">${I.brief()}</div><div><b>WhatsApp Business</b><span>Conta comercial</span></div><div class="radio"></div></div>
+    <label style="display:flex;align-items:center;gap:10px;margin-top:16px;font-size:15px;color:var(--text-2)"><span style="width:22px;height:22px;border-radius:6px;border:2px solid var(--outline)"></span>Lembrar minha escolha</label>
+    <div class="btn" style="margin-top:18px">Continuar</div></div>`;
+  return phone({platform:'ios', theme, body, keyboard:false, extra});
+}
+function propCountry(theme) {
+  const body = homeContent({state:'empty'});
+  const cs = [['🇧🇷','Brasil','+55',1],['🇵🇹','Portugal','+351'],['🇺🇸','Estados Unidos','+1'],['🇦🇷','Argentina','+54'],['🇵🇾','Paraguai','+595'],['🇺🇾','Uruguai','+598']];
+  const extra = `<div class="scrim"></div><div class="sheet" style="top:200px"><div class="grabber"></div>
+    <h3>País do número</h3>
+    <div class="search">${I.search()} Buscar país ou código</div>
+    <div style="margin-top:8px">${cs.map(([f,n,c,s]) => `<div class="country ${s?'sel':''}"><span class="flag">${f}</span>${n}<span class="code">${c}</span></div>`).join('')}</div></div>`;
+  return phone({platform:'ios', theme, body, keyboard:false, extra});
+}
+
+/* ---------- boards ---------- */
+const head = (t, s) => `<div class="board-head"><img src="${LOGO}"><div><h1>${t}</h1><p>${s}</p></div></div>`;
+const cell = (content, cap, small='', tag='') => `<div class="cell">${content}<div class="cap">${tag}${cap}${small?`<small>${small}</small>`:''}</div></div>`;
+const T = (t, c='') => `<div class="tag ${c}">${t}</div><br>`;
+
+function boardMain() {
+  return `<div class="board">${head('Sem salvar — nova interface', 'Tela principal · iOS e Android · modo claro e escuro')}
+  <div class="row">
+    ${cell(home('ios','light','empty'), 'iOS · Claro · ao abrir', 'Teclado numérico já aberto; o botão fica logo acima dele, na zona do polegar.')}
+    ${cell(home('ios','light','filled'), 'iOS · Claro · número digitado', 'Máscara (DD) 00000-0000 com números tabulares e alto contraste.')}
+    ${cell(home('ios','dark','empty'), 'iOS · Escuro · ao abrir', 'Fundo quase-preto esverdeado, verde-menta com texto escuro no botão.')}
+    ${cell(home('ios','dark','filled'), 'iOS · Escuro · número digitado')}
+  </div>
+  <div class="row">
+    ${cell(home('android','light','empty'), 'Android · Claro · ao abrir', 'Mesmo layout com tipografia Roboto e tecla “enviar” do teclado.')}
+    ${cell(home('android','light','filled'), 'Android · Claro · número digitado')}
+    ${cell(home('android','dark','empty'), 'Android · Escuro · ao abrir')}
+    ${cell(home('android','dark','filled'), 'Android · Escuro · número digitado')}
+  </div></div>`;
+}
+function boardBeforeAfter() {
+  return `<div class="board">${head('Antes × Depois', 'Mesma funcionalidade: digitar o número e abrir a conversa')}
+  <div class="row">
+    ${cell(oldHome('light'), T('Antes','old')+'Claro')}
+    ${cell(home('ios','light','filled'), T('Depois')+'Claro')}
+    <div style="width:40px"></div>
+    ${cell(oldHome('dark'), T('Antes','old')+'Escuro')}
+    ${cell(home('ios','dark','filled'), T('Depois')+'Escuro')}
+  </div></div>`;
+}
+function boardSplash() {
+  return `<div class="board">${head('Abertura (splash)', 'iOS LaunchScreen e Android 12+ SplashScreen API · segue o tema do sistema')}
+  <div class="row">
+    ${cell(splash('ios','light'), 'iOS · Claro')}
+    ${cell(splash('ios','dark'), 'iOS · Escuro')}
+    ${cell(splash('android','light'), 'Android · Claro', 'Ícone adaptativo centralizado (padrão Android 12+).')}
+    ${cell(splash('android','dark'), 'Android · Escuro')}
+  </div></div>`;
+}
+function boardProposals() {
+  return `<div class="board">${head('Propostas de melhoria (não incluídas)', 'Exemplos visuais — só serão implementadas se você aprovar')}
+  <div class="row">
+    ${cell(propInline('light'), T('Proposta','warn')+'Validação no próprio campo', 'Substitui o alerta “Digite um número válido”: mostra o erro sem interromper e só habilita o botão com o número completo.')}
+    ${cell(propPasteRecents('light'), T('Proposta','warn')+'Colar número + Recentes', 'Detecta número copiado (ex.: de um anúncio) e guarda um histórico local opcional, que pode ser limpo.')}
+    ${cell(propChooser('dark'), T('Proposta','warn')+'WhatsApp ou Business', 'Para quem tem os dois apps: escolher onde abrir a conversa e lembrar a escolha.')}
+    ${cell(propCountry('dark'), T('Proposta','warn')+'Números de outros países', 'Hoje o app só aceita +55. Seletor de país com busca, Brasil como padrão.')}
+  </div></div>`;
+}
+
+function sw(name, hex, role, fg, contrast) {
+  return `<div class="sw"><div class="c" style="background:${hex};color:${fg}">${contrast||''}</div><div class="m"><b>${name}</b>${hex}<br>${role}</div></div>`;
+}
+function boardBrand() {
+  const iconsHome = (theme) => {
+    const others = ['#F4B400','#4285F4','#EA4335','#7C4DFF','#00ACC1','#FF7043','#8D6E63','#26A69A'];
+    return others.slice(0,4).map(c=>`<div class="ico"><i style="background:${c}"></i><span style="opacity:.0">x</span></div>`).join('');
+  };
+  const hs = (bg, color, label, android=false, variant='') => {
+    let icon;
+    if (variant === 'tinted') icon = `<img src="../logo/icon-a-tinted.svg">`;
+    else if (variant === 'mono') icon = `<div class="am" style="background:#D8E8E0;border-radius:50%"><img src="../logo/icon-a-mono.svg" style="transform:scale(1.15)"></div>`;
+    else if (android) icon = `<div class="am"><img src="${LOGO}"></div>`;
+    else icon = `<img src="${LOGO}">`;
+    const filler = (c) => `<div class="ico"><i style="background:${c}"></i><span>&nbsp;</span></div>`;
+    const fill = variant==='tinted' ? ['#3a3a3c','#3a3a3c','#3a3a3c','#3a3a3c'] : variant==='mono' ? ['#D8E8E0','#D8E8E0','#D8E8E0','#D8E8E0'] : ['#F4B400','#4285F4','#EA4335','#7C4DFF'];
+    return `<div class="cell"><div class="hs ${android?'android':''}" style="background:${bg};color:${color}">
+      ${filler(fill[0])}${filler(fill[1])}${filler(fill[2])}
+      ${filler(fill[3])}<div class="ico">${icon}<span>Sem salvar</span></div>${filler(fill[0])}
+    </div><div class="cap" style="font-size:14px">${label}</div></div>`;
+  };
+  return `<div class="board">${head('Marca e Design System', 'Logotipo, ícones, cores, tipografia e componentes')}
+  <div class="grid2">
+    <div class="card"><h3>Logotipo</h3><div class="sub">Balão de conversa + seta “abrir direto”. Fundo tinta-verde para não ser confundido com o ícone do WhatsApp.</div>
+      <div class="lockup"><img src="${LOGO}"><div><div class="wm">sem salvar</div><div class="tl">Converse sem salvar o contato.</div></div></div>
+      <div style="height:26px"></div>
+      <div class="lockup" style="background:#0B1110;padding:22px;border-radius:22px"><img src="${LOGO}" style="width:84px;height:84px;border-radius:19px"><div><div class="wm inv" style="font-size:46px">sem salvar</div></div></div>
+    </div>
+    <div class="card"><h3>Conceitos avaliados</h3><div class="sub">Recomendo o A. B e C ficam como alternativas.</div>
+      <div class="alts">
+        <div class="alt rec"><img src="../logo/icon-a-direto.svg"><b>A · Direto (recomendado)</b>Distinto do WhatsApp, legível em 29 pt, a seta comunica “abre na hora”.</div>
+        <div class="alt"><img src="../logo/icon-b-teclado.svg"><b>B · Teclado</b>Comunica “digite o número”, mas verde+balão branco lembra demais o WhatsApp (risco de marca).</div>
+        <div class="alt"><img src="../logo/icon-c-claro.svg"><b>C · Claro</b>Versão invertida do A; some em telas de fundo claro.</div>
+      </div>
+    </div>
+  </div>
+  <div class="card"><h3>Ícone na tela inicial</h3><div class="sub">iOS 18+/26: variantes claro, escuro e tingido · Android 13+: ícone adaptativo com versão monocromática (ícones temáticos)</div>
+    <div class="homes">
+      ${hs('linear-gradient(160deg,#9FD8C2,#E9D8B9)','#1d1d1f','iOS · Claro')}
+      ${hs('linear-gradient(160deg,#1f2a27,#0a0f0e)','#f2f2f2','iOS · Escuro')}
+      ${hs('linear-gradient(160deg,#1f2a27,#0a0f0e)','#f2f2f2','iOS · Tingido', false, 'tinted')}
+      ${hs('linear-gradient(160deg,#CFE3D9,#F0E7D6)','#1d1d1f','Android · Adaptativo', true)}
+      ${hs('linear-gradient(160deg,#CFE3D9,#F0E7D6)','#1d1d1f','Android · Ícone temático', true, 'mono')}
+    </div>
+  </div>
+  <div class="card"><h3>Cores</h3><div class="sub">Todas as combinações de texto passam WCAG AA (≥ 4,5:1). Números na faixa colorida = contraste do texto principal sobre a cor.</div>
+    <div style="font-weight:700;font-size:14px;margin:4px 0 10px">Modo claro</div>
+    <div class="swatches">
+      ${sw('Fundo','#F5F7F6','background','#0F1A16','16,6:1')}
+      ${sw('Superfície','#FFFFFF','cards, campo','#0F1A16','17,6:1')}
+      ${sw('Texto','#0F1A16','títulos e valores','#fff','')}
+      ${sw('Texto secundário','#52605A','descrições','#fff','6,1:1')}
+      ${sw('Primária','#0A7D55','botão, foco','#fff','5,2:1')}
+      ${sw('Erro','#C62828','validação','#fff','5,6:1')}
+    </div>
+    <div style="font-weight:700;font-size:14px;margin:18px 0 10px">Modo escuro</div>
+    <div class="swatches">
+      ${sw('Fundo','#0B1110','background','#EEF3F1','17,0:1')}
+      ${sw('Superfície','#141C1A','cards, campo','#EEF3F1','15,4:1')}
+      ${sw('Texto','#EEF3F1','títulos e valores','#0B1110','')}
+      ${sw('Texto secundário','#A3B1AB','descrições','#0B1110','8,6:1')}
+      ${sw('Primária','#2FD694','botão, foco','#04241A','8,8:1')}
+      ${sw('Erro','#FF7A73','validação','#0B1110','6,8:1')}
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="card"><h3>Tipografia</h3><div class="sub">Fontes do sistema (SF Pro no iOS, Roboto no Android): nítidas, leves e respeitam o tamanho de fonte do usuário.</div>
+      <div class="type-row"><span class="spec">Título · 28/34 · Bold</span><span style="font-size:28px;font-weight:750;letter-spacing:-.6px">Converse sem salvar</span></div>
+      <div class="type-row"><span class="spec">Número · 30/36 · Semibold · tabular</span><span style="font-size:30px;font-weight:600;font-variant-numeric:tabular-nums">(11) 98765-4321</span></div>
+      <div class="type-row"><span class="spec">Botão · 17/22 · Semibold</span><span style="font-size:17px;font-weight:650">Abrir conversa</span></div>
+      <div class="type-row"><span class="spec">Corpo · 16/22 · Regular</span><span style="font-size:16px;color:#52605A">Digite o número com DDD.</span></div>
+      <div class="type-row"><span class="spec">Rótulo · 13/18 · Semibold</span><span style="font-size:13px;font-weight:600;color:#52605A">Número com DDD</span></div>
+    </div>
+    <div class="card"><h3>Espaçamento, forma e toque</h3><div class="sub">Grade de 4 pt · áreas de toque ≥ 48 pt · cantos arredondados consistentes</div>
+      <div style="display:flex;gap:10px;align-items:flex-end;margin-bottom:22px">${[4,8,12,16,20,24,32].map(n=>`<div style="text-align:center;font-size:12px;color:#5A6862"><div style="width:${n*1.6}px;height:${n*1.6}px;background:#0A7D55;border-radius:3px;margin:0 auto 6px"></div>${n}</div>`).join('')}</div>
+      <div style="display:flex;gap:18px;align-items:center;font-size:13px;color:#5A6862">
+        <div style="text-align:center"><div style="width:70px;height:48px;border-radius:10px;border:2px solid #0A7D55;margin-bottom:6px"></div>10 · chip</div>
+        <div style="text-align:center"><div style="width:90px;height:56px;border-radius:20px;border:2px solid #0A7D55;margin-bottom:6px"></div>20 · campo</div>
+        <div style="text-align:center"><div style="width:120px;height:56px;border-radius:999px;border:2px solid #0A7D55;margin-bottom:6px"></div>pílula · botão</div>
+      </div>
+    </div>
+  </div>
+  <div class="card"><h3>Componentes</h3><div class="sub">Estados do campo e do botão nos dois temas</div>
+    <div class="comp-grid">
+      <div class="comp t-light"><div class="lbl">Campo · focado</div>${field({state:'empty'})}</div>
+      <div class="comp t-light"><div class="lbl">Campo · preenchido</div>${field({state:'filled', value:'(11) 98765-4321'})}</div>
+      <div class="comp t-light"><div class="lbl">Botão · normal / pressionado</div><div class="btn">Abrir conversa ${I.arrow()}</div><div class="btn pressed" style="margin-top:10px">Abrir conversa ${I.arrow()}</div></div>
+      <div class="comp t-dark"><div class="lbl">Campo · focado</div>${field({state:'empty'})}</div>
+      <div class="comp t-dark"><div class="lbl">Campo · preenchido</div>${field({state:'filled', value:'(11) 98765-4321'})}</div>
+      <div class="comp t-dark"><div class="lbl">Botão · normal / pressionado</div><div class="btn">Abrir conversa ${I.arrow()}</div><div class="btn pressed" style="margin-top:10px">Abrir conversa ${I.arrow()}</div></div>
+    </div>
+  </div>
+  </div>`;
+}
+
+
+function boardStore() {
+  const shot = (cls, title, sub, inner) => `<div class="shot ${cls}"><h3>${title}</h3>${sub?`<p>${sub}</p>`:''}<div class="shotphone">${inner}</div></div>`;
+  return `<div class="board">${head('Materiais das lojas', 'Screenshots de divulgação (App Store 6,9" e Google Play) e imagem de destaque do Play')}
+  <div class="row" style="gap:28px">
+    ${shot('ink', 'Converse <em>sem salvar</em> o contato', 'Digite o número e a conversa abre direto no WhatsApp.', home('ios','light','filled'))}
+    ${shot('mint', 'Só o número com DDD. <em>O +55 é automático.</em>', '', home('ios','light','empty'))}
+    ${shot('ink', '<em>Nada fica salvo.</em> Nem na agenda, nem no app.', 'Sem anúncios, sem cadastro, sem permissões.', home('ios','dark','empty'))}
+    ${shot('mint', 'Claro ou escuro, <em>do seu jeito.</em>', 'Segue o tema do seu celular.', home('ios','dark','filled'))}
+  </div>
+  <div class="fg"><div class="l"><img src="${LOGO}"><div class="wm">sem salvar</div><div class="tl">Converse sem salvar o contato.</div></div>
+    <div class="shotphone">${home('android','dark','filled')}</div></div>
+  </div>`;
+}
+
+/* ---------- router ---------- */
+const q = new URLSearchParams(location.hash.slice(1));
+const view = q.get('view') || 'main';
+const root = document.getElementById('root');
+const views = {
+  main: boardMain, store: boardStore, beforeafter: boardBeforeAfter, splash: boardSplash, proposals: boardProposals, brand: boardBrand,
+  phone: () => `<div style="padding:30px;display:inline-block">${home(q.get('p')||'ios', q.get('t')||'light', q.get('s')||'empty')}</div>`,
+};
+root.innerHTML = views[view]();
+</script>
+</body>
+</html>
